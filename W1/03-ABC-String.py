@@ -3,8 +3,7 @@ charset = set()
 result = 0
 
 # loop continuously until nothing in string
-flag = True
-while flag:
+while True:
     # updates for every pass through the current string
     charmap = [0] * len(string)
 
@@ -34,6 +33,6 @@ while flag:
     result += 1
 
     if len(string) == 0:
-        flag = False
+        break
 
 print(result)
