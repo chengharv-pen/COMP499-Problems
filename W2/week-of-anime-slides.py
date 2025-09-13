@@ -1,5 +1,3 @@
-from bisect import bisect_right
-
 def main():
     while True:
         # 1 <= N <= 1000
@@ -14,7 +12,7 @@ def main():
             s, f, e = map(int, input().split())
             intervals.append([s, f, e, i]) # triple (start, finish, enjoyment) followed by unsorted index.
 
-        sorted_intervals = sorted(intervals, key=lambda x: (x[1], -x[2], x[0]))  # sort by finish, then max enjoyment, then start
+        sorted_intervals = sorted(intervals, key=lambda x: (x[1], x[0])) # sort by finish, then start
 
         # DEBUG: printing intervals
         # print(intervals)
@@ -25,34 +23,23 @@ def main():
         before = [-1] * N           # pointer to previous intervals
         decision = [0] * N          # 1 -> take interval, 0 -> do not take interval
 
-        # TODO: Used for the optimized j loop approach
-        # finish_times = [interval[1] for interval in sorted_intervals]
-
         # Step 3: Find the maximum sums of weights (D)
         for i in range(N):
-            # we need to store the interval that maximizes enjoyment,
-            # not just the last one that is compatible [if multiple j are compatible with i, it might miss the best one]
-            best_prev = -1
-            best_value = 0
-
             for j in range(i):
+                # if previous interval's finish time is <= current interval's start time...
                 if sorted_intervals[j][1] <= sorted_intervals[i][0]:
-                    if D[j] > best_value:
-                        best_value = D[j]
-                        best_prev = j
+                    before[i] = j
 
-            before[i] = best_prev
-            include = sorted_intervals[i][2] + (D[best_prev] if best_prev != -1 else 0)
+            include = sorted_intervals[i][2] + D[before[i]] if before[i] != -1 else sorted_intervals[i][2]
             exclude = D[i - 1] if i > 0 else 0
 
-            # TODO: This one optimizes the j loop using binary search, please check later...
-            # j = bisect_right(finish_times, sorted_intervals[i][0], hi=i) - 1
-            # before[i] = j if j >= 0 else -1
-            # include = sorted_intervals[i][2] + (D[before[i]] if before[i] != -1 else 0)
-            # exclude = D[i - 1] if i > 0 else 0
-
             D[i] = max(include, exclude)
-            decision[i] = 1 if include > exclude else 0
+
+            # consistent with D[i] being the max...
+            if include > exclude: # if tied then DO NOT take interval
+                decision[i] = 1
+            else:
+                decision[i] = 0
 
         # Step 4: Append decision indexes to result
         ind = N - 1
@@ -65,8 +52,7 @@ def main():
                 ind -= 1
 
         result.sort()
-        print(f"{D[N - 1]}: {' '.join(map(str, result)) if result else ''}")
-
+        print(f"{D[N - 1]}: {' '.join(map(str, result))}")
 
 if __name__ == '__main__':
     main()
