@@ -1,7 +1,7 @@
 def main():
     while True:
         # 1 <= N <= 1000
-        N = int(input())
+        N = int(input().strip())
 
         if N == -1:
             break
@@ -9,7 +9,7 @@ def main():
         # Step 1: Populate intervals list and ASC sort it by finish time
         intervals = []
         for i in range(N):
-            s, f, e = map(int, input().split())
+            s, f, e = map(int, input().strip().split())
             intervals.append([s, f, e, i]) # triple (start, finish, enjoyment) followed by unsorted index.
 
         sorted_intervals = sorted(intervals, key=lambda x: (x[1], x[0])) # sort by finish, then start
