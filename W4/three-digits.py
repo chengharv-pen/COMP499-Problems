@@ -1,3 +1,5 @@
+import math
+
 def last_three_digits_before_trailing_zeroes(n):
     result = 1
     count_5 = 0
@@ -21,23 +23,39 @@ def last_three_digits_before_trailing_zeroes(n):
             num //= 2
             count_2 += 1
 
-        # multiply the remaining part to result, modulo 1000 keeps the last 3 digits
-        result = (result * num) % 1000
+        result *= num
+
+        # remove trailing zeroes after every multiplication
+        while result % 10 == 0:
+            result //= 10
+
+        # keep result manageable (prevent overflows)
+        result %= 10**10
 
     # why do we need to remove the excess???
     # because there are extra 2s not paired with 5 that are part of the actual number
     excess_2 = count_2 - count_5
     # print(count_2, count_5, excess_2) # DEBUG
 
-    # multiply by 2^excess_2 modulo 1000 (because result may become over 3 digits again)
     for _ in range(excess_2):
-        result = (result * 2) % 1000
+        result *= 2
 
-    return result
+        # remove trailing zeroes after every multiplication
+        while result % 10 == 0:
+            result //= 10
+
+        # keep result manageable (prevent overflows)
+        result %= 10**10
+
+    result_str = str(result).rstrip('0') # convert to string and remove trailing zeroes
+    last_digits = result_str[-3:] if len(result_str) >= 3 else result_str # get last 3 non-zero digits
+
+    return last_digits
 
 def main():
     n = int(input().strip())
     result = last_three_digits_before_trailing_zeroes(n)
+    # print(result, math.factorial(n))
     print(result)
 
 
