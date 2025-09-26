@@ -1,7 +1,7 @@
 numOfTestCases = input()
 
 for i in range(int(numOfTestCases)):
-    line = input()
+    line = input().strip()
     length = len(line)
     tetrisSet = set()
 
