@@ -72,7 +72,12 @@ def main():
             index = before[index] # so we're backtracking here!
 
         sol = sorted(sol)
-        print(f"{dp[n-1]}:" + "".join(f" {x}" for x in sol))
+        print(f"{dp[n - 1]}:", end="")
+
+        for val in sol:
+            print(f" {val}", end="")
+
+        print()
 
 if __name__ == "__main__":
     main()
