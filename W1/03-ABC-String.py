@@ -1,4 +1,4 @@
-string = input()
+string = input().strip()
 charset = set()
 result = 0
 
