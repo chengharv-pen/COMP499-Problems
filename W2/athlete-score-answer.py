@@ -8,27 +8,23 @@ def main():
             break
 
         A = list(map(int, input().split()))
-        D = [1] * N
+        dp = [1] * N
         prev = [0] * N
 
         for i in range(N):
-
             m = 0
             prev[i] = i
-
             for j in range(i):
-
-                if A[j] < A[i] and D[j] > m:
-                    m = D[j]
+                if A[j] < A[i] and dp[j] > m:
+                    m = dp[j]
                     prev[i] = j
 
-            D[i] = 1 + m
+            dp[i] = 1 + m
 
         result = deque()
-        ind = D.index(max(D))
+        ind = dp.index(max(dp))
 
         result.appendleft(ind)
-
         while prev[ind] != ind:
             ind = prev[ind]
             result.appendleft(ind)
