@@ -1,20 +1,39 @@
-def matrix_chain_order(dims):
-    n = len(dims) - 1  # Number of matrices
-    # dp[i][j] = minimum scalar multiplications for A_i to A_j
+def main():
+    n = int(input().strip()) - 1
+    dims = list(map(int, input().split()))
+
+    # minimum scalar multiplications for A_i to A_j
     dp = [[0] * n for _ in range(n)]
 
     # Chain length from 2 to n
     for length in range(2, n + 1):
+
+        # slides a window of size = length across the chain
         for i in range(n - length + 1):
             j = i + length - 1
             dp[i][j] = float('inf')
+
+            """
+            
+            Tries all possible split points k inside subchain (Ai .. Aj)
+            
+            For each split, you add:
+
+            1. Cost of multiplying the left subchain dp[i][k].
+            
+            2. Cost of multiplying the right subchain dp[k+1][j].
+            
+            3. Cost of multiplying the resulting two matrices together:
+                dims[i] * dims[k + 1] * dims[j + 1]
+                
+            Then take the minimum of all splits
+            
+            """
             for k in range(i, j):
                 cost = dp[i][k] + dp[k + 1][j] + dims[i] * dims[k + 1] * dims[j + 1]
                 dp[i][j] = min(dp[i][j], cost)
-    return dp[0][n - 1]
 
+    print(dp[0][n - 1])
 
-# Example usage:
-dimensions = [5, 10, 3, 12, 5]  # Matrices: A(5×10), B(10×3), C(3×12), D(12×5)
-min_mults = matrix_chain_order(dimensions)
-print(f"Minimum scalar multiplications: {min_mults}")  # Output: 405
+if __name__ == '__main__':
+    main()
