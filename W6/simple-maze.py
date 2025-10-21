@@ -46,8 +46,7 @@ def main():
 
     success = False
     while len(q) > 0 and not success:
-        e = q[0]
-        q.popleft()
+        e = q.popleft()
 
         r = e // m      # integer division as intended in the C++ code, row index
         c = e % m       # column index
@@ -78,16 +77,12 @@ def main():
         print("YES")
         print(D[b])
 
-        os = ''
+        path = []
         while b != a:
-            os += O[b]
+            path.append(O[b])
             b = P[b]
-
-        res = ''
-        for i in range(len(os) - 1, -1, -1):
-            res += os[i]
-
-        print(res)
+        path.reverse()
+        print("".join(path))
     else:
         print("NO")
 

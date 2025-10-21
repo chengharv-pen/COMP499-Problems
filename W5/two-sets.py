@@ -5,7 +5,8 @@ def main():
     S = n * (n + 1) // 2
 
     if S % 2 == 1:
-        return 0
+        print(0)
+        return
 
     target = S // 2
 
@@ -22,6 +23,7 @@ def main():
     inv2 = pow(2, MOD - 2, MOD)
 
     print(dp[target] * inv2 % MOD)
+
 
 if __name__ == "__main__":
     main()
