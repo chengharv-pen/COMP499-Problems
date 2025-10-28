@@ -22,7 +22,7 @@ class Graph:
  
         # To store the parent array which, in turn, stores MST
         parent = [-1] * self.n
- 
+
         # To keep track of vertices included in MST
         in_mst = [False] * self.n
  
@@ -55,9 +55,9 @@ class Graph:
                     parent[v] = u
  
         # Print edges of MST using the parent array
-        sum = 0;
+        sum = 0
         for i in range(1, self.n):
-            sum = sum + key[i];
+            sum = sum + key[i]
             print(f"{parent[i]} - {i}")
         print(sum)
  
@@ -96,7 +96,7 @@ def fixroads():
     for i in range(0, m):
         line = input()
         strVals = line.split(' ')
-        g.add_edge(int(strVals[0])-1,int(strVals[1])-1, int(strVals[2]))
+        g.add_edge(int(strVals[0])-1, int(strVals[1])-1, int(strVals[2]))
         
     g.prim_mst()
 

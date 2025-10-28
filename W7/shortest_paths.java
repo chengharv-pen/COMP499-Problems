@@ -42,7 +42,8 @@ public class shortest_paths {
                 {
                     return a.second - b.second;
                 }
-            });
+            }
+        );
 
         int src = 0; // Taking vertex 0 as source
 
