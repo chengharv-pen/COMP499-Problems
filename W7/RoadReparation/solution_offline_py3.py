@@ -86,10 +86,11 @@ def unittesting():
  
  
 def fixroads():
-    line = input()
-    strVals = line.split(' ')
-    n = int(strVals[0])
-    m = int(strVals[1])
+    n, m = map(int, input().strip().split(' '))
+    # line = input()
+    # strVals = line.split(' ')
+    # n = int(strVals[0])
+    # m = int(strVals[1])
 
     g = Graph(n)
 
