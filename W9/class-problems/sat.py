@@ -99,7 +99,13 @@ def main():
                     # checks if literal is satisfied
                     # variable i corresponds to position (i-1) in tau (but why?)
                     var_index = abs(lit) - 1
+                    # var_index = (lit > 0) ? (lit - 1) : (-lit - 1)
+
                     var_value = (tau >> var_index) & 1  # 1 if true, 0 if false
+                    # var_value = ((tau & (1 << var_index)) == 0) ? false : true
+
+                    # same condition as the 2 if'   s that follow
+                    # if ((lit > 0 && var_value) || (lit < 0 && !var_value))
 
                     # if literal appears positively, it is satisfied when corresponding variable is set to true in tau
                     if lit > 0 and var_value == 1:

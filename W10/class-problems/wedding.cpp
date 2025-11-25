@@ -7,8 +7,8 @@
 #include <string>
 using namespace std;
 
-const int DEBUG_LEVEL = 3;
-stack<int> dfs_order;
+const int DEBUG_LEVEL = 0;
+vector<int> dfs_order_rev;
 
 void dfs_visit(int v, const vector<vector<int>> & adj, vector<int> &marked, int mark) {
     for(int neighbor : adj[v]) {
@@ -17,7 +17,7 @@ void dfs_visit(int v, const vector<vector<int>> & adj, vector<int> &marked, int 
             dfs_visit(neighbor, adj, marked, mark);
         }
     }
-    dfs_order.push(v);
+    dfs_order_rev.push_back(v); // order of vertices by increasing finishing time
 }
 
 int negate_literal(int lit, int n) {
@@ -91,9 +91,61 @@ int main() {
     }
 
     /* Run the first DFS */
+    vector<int> marked(2*n, -1);
+    dfs_order_rev.clear();
+    for(int i = 0; i < 2*n; i++) {
+        if(marked[i] == -1) {
+            marked[i] = 1;
+            dfs_visit(i, adj, marked, 1);
+        }
+    }
+    //cout << dfs_order_rev.size() << endl;
 
+
+    // copy the order of vertices
+    vector<int> dfs_order_rev_copy = dfs_order_rev;
+    dfs_order_rev.clear();
+    marked.assign(2*n, -1);
+    int comp_no = 0;
     /* Run the second DFS */
+    for(auto it = dfs_order_rev_copy.rbegin(); it != dfs_order_rev_copy.rend(); it++) {
+        int v = *it;
+        if(marked[v] == -1) {
+            marked[v] = comp_no;
+            dfs_visit(v, adj_rev, marked, comp_no);
+            comp_no++;
+        }
+    }
 
     /* Compute assignment */
+    vector<bool> assignment(n, false);
+    bool is_sat = true;
+    for(int i = 0; i < n; i++) {
+        int comp_i = marked[i];
+        int comp_neg_i = marked[negate_literal(i,n)];
+        if(comp_i == comp_neg_i) {
+            is_sat = false;
+            //cout << i << comp_i << endl;
+            break;
+        } else if (comp_i > comp_neg_i) {
+            assignment[i] = true;
+        } else {
+            assignment[i] = false;
+        }
+    }
+
+    if(!is_sat) {
+        cout << "bad luck" << endl;
+    } else {
+        for(int i = 1; i < n; i++) {
+            cout << i << (assignment[i]?("w"):("h"));
+            if(i < n-1) {
+                cout << " ";
+            } else {
+                cout << endl;
+            }
+        }
+    }
+
     return 0;
 }
